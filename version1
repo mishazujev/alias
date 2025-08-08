@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alias Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #word {
+            font-size: 2em;
+            margin: 30px 0;
+        }
+        #timer {
+            font-size: 1.5em;
+            color: darkred;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Alias Game</h1>
+    <button onclick="startGame()">Start Game</button>
+    <div id="word">Press "Start Game"</div>
+    <div id="timer"></div>
+
+    <script>
+        const words = [
+            "apple", "river", "book", "mountain", "car", "pencil", "friend", "phone", "music", "coffee",
+            "sun", "moon", "ocean", "tree", "ball", "computer", "keyboard", "banana", "guitar", "train",
+            "shoe", "cloud", "hat", "window", "clock", "camera", "glass", "cat", "dog", "chair",
+            "pen", "light", "fish", "bird", "cake", "snow", "fire", "bridge", "road", "city",
+            "forest", "star", "bottle", "plane", "earth", "king", "queen", "knife", "rain", "map",
+            "ring", "flower", "watch", "tower", "shirt", "beach", "flag", "drum", "piano", "balloon",
+            "soap", "rope", "mirror", "broom", "box", "paint", "milk", "honey", "sand", "bench",
+            "candle", "horse", "wallet", "coin", "bat", "rocket", "duck", "elephant", "lion", "tiger",
+            "zebra", "ladder", "swing", "bell", "ice", "pillow", "bed", "door", "fan", "leaf",
+            "bag", "cookie", "glove", "stone", "cloud", "stick", "frame", "socks", "mouse", "bread"
+        ];
+
+        let timeLeft = 180; // 3 minutes = 180 seconds
+        let timerInterval;
+        let gameActive = false;
+
+        function getRandomWord() {
+            const index = Math.floor(Math.random() * words.length);
+            return words[index];
+        }
+
+        function showWord() {
+            document.getElementById('word').innerText = getRandomWord();
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startGame() {
+            if (gameActive) return; // prevent restarting
+            gameActive = true;
+            timeLeft = 180;
+            showWord();
+            updateTimer();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('word').innerText = "Time's up!";
+                    gameActive = false;
+                }
+            }, 1000);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' && gameActive) {
+                event.preventDefault(); // prevent page scroll
+                showWord();
+            }
+        });
+    </script>
+
+</body>
+</html>
